@@ -6,6 +6,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-webpack
   - serverless-plugin-tracing
+  - serverless-offline
 
 frameworkVersion: '3'
 
@@ -20,6 +21,17 @@ provider:
     apiGateway: true
   environment:
     PROJECT_NAME: "todo-app"
+    TODOS_TABLE: Todos-${self:provider.stage}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:PutItem
+          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
 
 functions:
   GetTodos:
@@ -51,3 +63,19 @@ resources:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
         ValidateRequestParameters: false
+
+    TodosDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: todoId
+            AttributeType: S
+          - AttributeName: createdBy
+            AttributeType: S
+        KeySchema:
+          - AttributeName: createdBy
+            KeyType: HASH
+          - AttributeName: todoId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.TODOS_TABLE}

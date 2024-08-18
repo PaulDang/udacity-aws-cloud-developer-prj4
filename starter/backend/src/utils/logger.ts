@@ -1,6 +1,6 @@
-import * as winston from 'winston';
+import * as winston from 'winston'
 
-export function log(loggerName: string) {
+export function createLogger(loggerName: string) {
     return winston.createLogger({
         level: 'info',
         format: winston.format.json(),

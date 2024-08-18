@@ -4,16 +4,15 @@ import { TodoBusinessService } from "../businesses/todo-business.service";
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const userId = "1";
+    const todoId = event.pathParameters.todoId;
     const service: TodoBusinessService = new TodoBusinessService();
 
-    console.log(event);
-
     try {
-        var items = await service.getAll(userId);
+        await service.delete(userId, todoId);
 
         return {
-            statusCode: 200,
-            body: JSON.stringify({ items }),
+            statusCode: 204,
+            body: ""
         };
     } catch (error) {
         return {

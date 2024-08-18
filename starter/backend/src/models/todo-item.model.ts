@@ -1,9 +1,9 @@
 export class TodoItemModel {
-    todoId:string;
+    todoId: string;
     name: string;
     dueDate: string;
     done: boolean;
     attachmentUrl?: string;
-    createdAt: Date;
+    createdAt: string;
     createdBy: string;
 }

@@ -1,4 +1,4 @@
-export class TodoRequestModel {
+export class CreateTodoRequestModel {
     name: string;
     dueDate: string;
 }

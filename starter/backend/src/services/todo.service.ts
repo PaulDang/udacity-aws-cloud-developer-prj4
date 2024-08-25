@@ -2,10 +2,10 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb";
 import { TodoItemModel } from "../models/todo-item.model";
 import { UpdateTodoRequestModel } from "../models/update-todo-request.model";
 import * as AWS from "aws-sdk";
-import * as AWSX from "aws-xray-sdk-core";
-import { DynamoDB } from "@aws-sdk/client-dynamodb";
+// import * as AWSX from "aws-xray-sdk-core";
+// import { DynamoDB } from "@aws-sdk/client-dynamodb";
 
-const dynamoDB = new DynamoDB({});
+//const dynamoDB = new DynamoDB({});
 //const dynamoDBXRay = AWSX.captureAWSClient(dynamoDB);
 
 const s3_bucket_name = process.env.ATTACHMENT_S3_BUCKET;

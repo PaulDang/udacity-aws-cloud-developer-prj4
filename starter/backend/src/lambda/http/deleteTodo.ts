@@ -1,9 +1,12 @@
 import middy from "@middy/core";
+import cors from '@middy/http-cors'
+import httpErrorHandler from '@middy/http-error-handler'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { TodoBusinessService } from "../businesses/todo-business.service";
+import { getUserId } from "../../services/auth.service";
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const userId = "1";
+    const userId = getUserId(event);
     const todoId = event.pathParameters.todoId;
     const service: TodoBusinessService = new TodoBusinessService();
 
@@ -25,3 +28,8 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
         };
     }
 });
+
+handler.use(httpErrorHandler())
+    .use(cors({
+        credentials: true
+    }));

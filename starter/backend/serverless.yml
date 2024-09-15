@@ -1,5 +1,5 @@
 app: serverless-todo-app
-org: lamnv
+org: thanhdv
 service: serverless-todo-app
 
 plugins:
@@ -16,7 +16,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs16.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   profile: default
@@ -24,10 +24,10 @@ provider:
     lambda: true
     apiGateway: true
   environment:
-    PROJECT_NAME: "todo-app"
+    PROJECT_NAME: 'todo-app'
     TODOS_TABLE: Todos-${self:provider.stage}
     ATTACHMENT_S3_BUCKET: todo-app-containers-${self:provider.stage}
-    OATH: "dev-80rptavssoyyvwkd.us.auth0.com"
+    OATH: 'dev-218qcgh7n40yagv0.us.auth0.com'
 
   logs:
     restApi: true
@@ -39,7 +39,7 @@ provider:
           Action:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
-          Resource: "*"
+          Resource: '*'
 
 functions:
   Auth:
@@ -61,7 +61,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: "*"
+        Resource: '*'
 
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
@@ -82,7 +82,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: "*"
+        Resource: '*'
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
@@ -103,7 +103,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: "*"
+        Resource: '*'
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
@@ -121,7 +121,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: "*"
+        Resource: '*'
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
@@ -144,7 +144,7 @@ functions:
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
-        Resource: "*"
+        Resource: '*'
 
 resources:
   Resources:
@@ -158,11 +158,11 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: ApiGatewayRestApi
-          
+
     RequestBodyValidator:
       Type: AWS::ApiGateway::RequestValidator
       Properties:
-        Name: "request-body-validator"
+        Name: 'request-body-validator'
         RestApiId:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
@@ -183,7 +183,7 @@ resources:
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
-    
+
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -198,9 +198,9 @@ resources:
         CorsConfiguration:
           CorsRules:
             - AllowedOrigins:
-                - "*"
+                - '*'
               AllowedHeaders:
-                - "*"
+                - '*'
               AllowedMethods:
                 - GET
                 - PUT
@@ -214,11 +214,11 @@ resources:
       Properties:
         PolicyDocument:
           Id: MyPolicy
-          Version: "2012-10-17"
+          Version: '2012-10-17'
           Statement:
             - Sid: PublicReadForGetBucketObjects
               Effect: Allow
-              Principal: "*"
-              Action: "s3:GetObject"
-              Resource: "arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*"
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
